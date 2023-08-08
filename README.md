@@ -15,7 +15,7 @@ API allows users to create profiles and book flights
 ## Run docker
 Docker should be installed
 + git clone https://github.com/ZaikaDaria/py-airport-api-service
-+ cd airport-api-service
++ cd py-airport-api-service
 + docker-compose up --build
 
 ## Getting access
