@@ -43,7 +43,7 @@ class Crew(models.Model):
         ordering = ["last_name"]
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        return f"{self.first_name} {self.last_name}"
 
     @property
     def full_name(self):
@@ -71,9 +71,7 @@ class Route(models.Model):
 
 
 class Flight(models.Model):
-    route = models.ForeignKey(
-        Route, on_delete=models.CASCADE, related_name="flights"
-    )
+    route = models.ForeignKey(Route, on_delete=models.CASCADE, related_name="flights")
     airplane = models.ForeignKey(
         Airplane, on_delete=models.CASCADE, related_name="flights"
     )
@@ -88,9 +86,7 @@ class Flight(models.Model):
 
 class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
-    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.created_at)
@@ -113,27 +109,27 @@ class Ticket(models.Model):
         return f"{str(self.flight)} (row: {self.row}, seat: {self.seat})"
 
     def save(
-            self,
-            force_insert=False,
-            force_update=False,
-            using=None,
-            update_fields=None,
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None,
     ):
         self.full_clean()
         super(Ticket, self).save(force_insert, force_update, using, update_fields)
 
     @staticmethod
     def validate_seat(
-            flight, ticket_attr_value, ticket_attr_name, route_attr_name, error_to_raise
+        flight, ticket_attr_value, ticket_attr_name, route_attr_name, error_to_raise
     ):
         count_attrs = getattr(flight.airplane, route_attr_name)
         if not (1 <= ticket_attr_value <= count_attrs):
             raise error_to_raise(
                 {
                     ticket_attr_name: f"{ticket_attr_name} "
-                                      f"number must be in available range: "
-                                      f"(1, {route_attr_name}): "
-                                      f"(1, {count_attrs})"
+                    f"number must be in available range: "
+                    f"(1, {route_attr_name}): "
+                    f"(1, {count_attrs})"
                 }
             )
 
