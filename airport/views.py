@@ -109,9 +109,6 @@ class RouteViewSet(
 
         return queryset.distinct()
 
-    def get_serializer_class(self):
-        return RouteSerializer
-
     @action(
         methods=["POST"],
         detail=True,
@@ -119,7 +116,10 @@ class RouteViewSet(
         permission_classes=[IsAdminUser],
     )
     def upload_image(self, request, pk=None):
-        return Response({"message": "Not applicable for Route model"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"message": "Not applicable for Route model"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     @extend_schema(
         parameters=[
@@ -150,8 +150,7 @@ class FlightViewSet(viewsets.ModelViewSet):
         .prefetch_related("route", "airplane", "crew")
         .annotate(
             tickets_available=(
-                F("airplane__rows") * F("airplane__seats_in_row")
-                - Count("tickets")
+                F("airplane__rows") * F("airplane__seats_in_row") - Count("tickets")
             )
         )
     )
@@ -193,8 +192,7 @@ class FlightViewSet(viewsets.ModelViewSet):
                 "date",
                 type=OpenApiTypes.DATE,
                 description=(
-                    "Filter by departure date of Flight "
-                    "(ex. ?date=2022-10-23)"
+                    "Filter by departure date of Flight " "(ex. ?date=2022-10-23)"
                 ),
             ),
         ]
