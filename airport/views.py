@@ -109,18 +109,6 @@ class RouteViewSet(
 
         return queryset.distinct()
 
-    @action(
-        methods=["POST"],
-        detail=True,
-        url_path="upload-image",
-        permission_classes=[IsAdminUser],
-    )
-    def upload_image(self, request, pk=None):
-        return Response(
-            {"message": "Not applicable for Route model"},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
     @extend_schema(
         parameters=[
             OpenApiParameter(
